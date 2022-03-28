@@ -24,7 +24,7 @@ public class ProfileTest {
         criteria.add(new Criterion(new Answer(question, Bool.TRUE), Weight.MustMatch));
         //실행
         boolean matches = profile.matches(criteria);
-        //단2
+        //단언
         assertFalse(matches);
     }
 
