@@ -10,10 +10,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.StringStartsWith.startsWith;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AssertTest {
 
@@ -90,7 +95,8 @@ public class AssertTest {
     }
 
     /**
-     * hamcrest assertThat의 경우 message라는 선택적 첫번쨰 인자 존재
+     * hamcrest 단언메시지 추가
+     * 실패시 메시지 출력(첫번째 인자값)
      */
     @Test
     public void testWithWorthlessAssertionComment() {
@@ -147,5 +153,37 @@ public class AssertTest {
         writer.close();
     }
 
+    /** assertThat 사용 */
+    @Test
+    public void assertThatTest() {
+        account.deposit(100);
+        //equalTo
+        assertThat(account.getBalance(), equalTo(100));
+        //not
+        assertThat(account.getName(), not(equalTo("plunderings")));
+        //notNullValue
+        assertThat(account.getName(), notNullValue());
+        //is
+        assertThat(account.getBalance() > 0, is(true));
+        //startsWith
+        assertThat(account.getName(), startsWith("an"));
+    }
+
+    /** 부동소수점 계산 */
+    @Test
+    public void when부동소수점Calurator_thenError() {
+        //테스트 실패
+        assertThat(2.32 * 3, equalTo(6.96));
+    }
+
+    @Test
+    public void when부동소수점Calurator_thenSuccess() {
+        assertTrue(Math.abs((2.32 * 3) - 6.96) < 0.0005);
+    }
+
+    @Test
+    public void closeTo_when부동소수점Calurator_thenSuccess() {
+        assertThat(2.32 * 3, closeTo(6.96, 0.0005));
+    }
 
 }
